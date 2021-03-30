@@ -1,0 +1,5 @@
+Manifest-Version: 0.9.1
+OpenIDE-Module-Name: Trophic Incoherence
+OpenIDE-Module-Short-Description: Calculates trophic incoherence of a directed network and the trophic levels of the nodes in the network.
+OpenIDE-Module-Long-Description: Calculates trophic incoherence of a directed network and the trophic levels of the nodes in the network. The trophic levels can be used to, for example, lay out directed networks in a way that corresponds with their trophic levels.
+OpenIDE-Module-Display-Category: Metric
