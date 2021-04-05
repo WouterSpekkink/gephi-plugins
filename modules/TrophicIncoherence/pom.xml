@@ -9,7 +9,7 @@
 
     <groupId>org.freetime</groupId>
     <artifactId>trophic-incoherence</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.2</version>
     <packaging>nbm</packaging>
 
     <name>Trophic Incoherence</name>

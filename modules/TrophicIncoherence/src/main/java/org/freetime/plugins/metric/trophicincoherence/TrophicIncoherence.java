@@ -43,6 +43,8 @@ public class TrophicIncoherence implements Statistics {
     
     public static final String TROPHICLEVEL = "Trophic_Level";
     public static final String COMPONENT = "Component";
+    public static final String POTENTIAL = "Potential_Flow";
+    public static final String CIRCULAR = "Circular_Flow";
     private boolean isDirected;
     private boolean negativeWeights = false;
     private boolean singularWarning = false;
@@ -82,10 +84,19 @@ public class TrophicIncoherence implements Statistics {
         if (graphModel.isDirected()) {
             // Add column for trophic levels if not already there
             Table nodeTable = graphModel.getNodeTable();
+            Table edgeTable = graphModel.getEdgeTable();
             Column trophcol = nodeTable.getColumn(TROPHICLEVEL);
             Column compcol = nodeTable.getColumn(COMPONENT);
+            Column potcol = edgeTable.getColumn(POTENTIAL);
+            Column circol = edgeTable.getColumn(CIRCULAR);
             if (trophcol == null) {
                 trophcol = nodeTable.addColumn(TROPHICLEVEL, "Trophic_Level", Double.class, null);
+            }
+            if (potcol == null) {
+                potcol = edgeTable.addColumn(POTENTIAL, "Potential_Flow", Double.class, null);
+            }
+            if (circol == null) {
+                circol = edgeTable.addColumn(CIRCULAR, "Circular_Flow", Double.class, null);
             }
             // Lock the graph while we are working with it.
             hgraph.readLock();
@@ -202,6 +213,7 @@ public class TrophicIncoherence implements Statistics {
                     }
                     
                     // An attempt to also calculate the trophic incoherence
+                    // We can also use this loop to get the potential flow network
                     
                     // First initialize the numinator and denominator
                     double numerator = 0.0;
@@ -216,6 +228,10 @@ public class TrophicIncoherence implements Statistics {
                                 if (weight < 0) {
                                     weight *= -1;
                                 }
+                                double pflow = weight * (results[j]-results[i]);
+                                double cflow = weight - pflow;
+                                hgraph.getEdge(nodes[i], nodes[j]).setAttribute(potcol, pflow);
+                                hgraph.getEdge(nodes[i], nodes[j]).setAttribute(circol, cflow);
                                 // Let's immediately add this to the sum of weights (denominator)
                                 denominator += weight;
                                 // Get the trophic level of the nodes
